@@ -1,24 +1,25 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
-require('dotenv').config()
+require('dotenv').config();
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
 
+// Middleware
+const corsOptions = {
+    //origin: ["http://localhost:5173", "https://movie-portal-f7f50.web.app"],
+    credentials: true,
+    optionsSuccessStatus: 200, // fixed typo from "operationSuccessStatus"
+};
 
-
-app.use(cors());
+const app = express();
 app.use(express.json());
+app.use(cors(corsOptions));
 
-
-
-
-
-
+// MongoDB connection URI
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.uru7rsz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -26,26 +27,48 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     }
 });
-
 async function run() {
     try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
-        // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
+
+        //await client.connect();
+        const carsCollection = client.db('ctgMarketing').collection('cars');
+
+
+        app.get('/cars', async (req, res) => {
+            const cursor = movieCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+
+        app.post('/cars', async (req, res) => {
+            const newMovie = req.body;
+            console.log('Adding movie:', newMovie);
+            const result = await movieCollection.insertOne(newMovie);
+            res.send(result);
+        });
+
+
+        app.delete('/cars/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await movieCollection.deleteOne(query);
+            res.send(result);
+        });
+
+        console.log("Connected to MongoDB successfully");
+    } catch (err) {
+        console.error("MongoDB connection error:", err);
     }
+
 }
 run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Car-cleaning success')
-})
+    res.send('Car Cleaning server is running');
+});
 
 app.listen(port, () => {
-    console.log(`Car is waiting at: ${port}`)
-})
+    console.log(`Car Cleaning is running on port: ${port}`);
+});
