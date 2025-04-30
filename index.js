@@ -7,7 +7,7 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 const corsOptions = {
-    //origin: ["http://localhost:5173", "https://movie-portal-f7f50.web.app"],
+    origin: ["http://localhost:5173", "https://ctg-market-sharing-web-client.web.app"],
     credentials: true,
     optionsSuccessStatus: 200, // fixed typo from "operationSuccessStatus"
 };
@@ -35,16 +35,16 @@ async function run() {
 
 
         app.get('/cars', async (req, res) => {
-            const cursor = movieCollection.find();
+            const cursor = carsCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         });
 
 
         app.post('/cars', async (req, res) => {
-            const newMovie = req.body;
-            console.log('Adding movie:', newMovie);
-            const result = await movieCollection.insertOne(newMovie);
+            const newCar = req.body;
+            console.log('Adding Car:', newCar);
+            const result = await carsCollection.insertOne(newCar);
             res.send(result);
         });
 
