@@ -40,7 +40,6 @@ async function run() {
             res.send(result);
         });
 
-
         app.post('/cars', async (req, res) => {
             const newCar = req.body;
             console.log('Adding Car:', newCar);
