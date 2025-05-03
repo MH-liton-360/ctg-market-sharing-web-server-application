@@ -58,7 +58,6 @@ async function run() {
             res.send(result);
         });
 
-
         app.get('/cars', async (req, res) => {
             const cursor = carsCollection.find();
             const result = await cursor.toArray();
@@ -82,7 +81,6 @@ async function run() {
     } catch (err) {
         console.error("MongoDB connection error:", err);
     }
-
 }
 run().catch(console.dir);
 
