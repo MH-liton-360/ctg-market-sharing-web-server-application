@@ -30,7 +30,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
 
-        //await client.connect();
+        await client.connect();
         const carsCollection = client.db('ctgMarketing').collection('cars');
 
         const bookingsCollection = client.db('ctgMarketing').collection('bookings');
@@ -51,11 +51,11 @@ async function run() {
         });
 
 
-        // Saved booking 
-        app.post('/bookings', async (req, res) => {
-            const booking = req.body;
-            console.log('Received Booking:', booking);
-            const result = await bookingsCollection.insertOne(booking);
+        // Delete Booking
+        app.delete('/bookings/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await bookingsCollection.deleteOne(query);
             res.send(result);
         });
 
