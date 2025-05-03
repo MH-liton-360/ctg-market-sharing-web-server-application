@@ -33,6 +33,33 @@ async function run() {
         //await client.connect();
         const carsCollection = client.db('ctgMarketing').collection('cars');
 
+        const bookingsCollection = client.db('ctgMarketing').collection('bookings');
+
+
+
+        // Create Booking 
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body;
+            console.log('New Booking:', booking);
+            const result = await bookingsCollection.insertOne(booking);
+            res.send(result);
+        });
+
+        app.get('/bookings', async (req, res) => {
+            const result = await bookingsCollection.find().toArray();
+            res.send(result);
+        });
+
+
+        // Saved booking 
+        app.post('/bookings', async (req, res) => {
+            const booking = req.body;
+            console.log('Received Booking:', booking);
+            const result = await bookingsCollection.insertOne(booking);
+            res.send(result);
+        });
+
+
 
         app.get('/cars', async (req, res) => {
             const cursor = carsCollection.find();
