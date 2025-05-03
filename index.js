@@ -30,7 +30,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
 
-        await client.connect();
+        //await client.connect();
         const carsCollection = client.db('ctgMarketing').collection('cars');
 
         const bookingsCollection = client.db('ctgMarketing').collection('bookings');
@@ -49,6 +49,9 @@ async function run() {
             const result = await bookingsCollection.find().toArray();
             res.send(result);
         });
+
+
+
 
 
         // Delete Booking
