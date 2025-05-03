@@ -35,8 +35,6 @@ async function run() {
 
         const bookingsCollection = client.db('ctgMarketing').collection('bookings');
 
-
-
         // Create Booking 
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
@@ -51,17 +49,14 @@ async function run() {
         });
 
 
-
-
-
         // Delete Booking
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
+            console.log("DELETE request received for ID:", id);
             const query = { _id: new ObjectId(id) };
             const result = await bookingsCollection.deleteOne(query);
             res.send(result);
         });
-
 
 
         app.get('/cars', async (req, res) => {
